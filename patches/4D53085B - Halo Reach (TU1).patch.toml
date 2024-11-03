@@ -1,0 +1,33 @@
+title_name = "Halo Reach"
+title_id = "4D53085B" # MS-2139
+hash = "DBC44902DBD3BCD8"
+#media_id = "566C10D3"
+
+# Required for Netplay
+
+[[patch]]
+    name = "Transport Security"
+    desc = "Allow IPv4 as secure addresses"
+    author = "craftycodie, Adrian"
+    is_enabled = true
+
+    [[patch.be16]] # Get insecure xbox address
+        address = 0x82273F84
+        value = 0x4800
+
+    [[patch.be32]] # Secure identifier retrieve
+        address = 0x82273A6C
+        value = 0x60000000
+    
+    [[patch.be32]] # Secure address retrieve
+        address = 0x822739C8
+        value = 0x60000000
+
+[[patch]]
+    name = "Ignore peer arbitration"
+    author = "codie, Adrian"
+    is_enabled = false
+
+    [[patch.be16]]
+        address = 0x8228834C
+        value = 0x4800
