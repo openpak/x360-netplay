@@ -48,7 +48,9 @@ export default class LeaderboardRepository implements ILeaderboardRepository {
       player: player.value,
     });
 
-    if (!leaderboard) return undefined;
+    if (!leaderboard) {
+      return undefined;
+    }
 
     return this.leaderboardDomainMapper.mapToDomainModel(leaderboard);
   }

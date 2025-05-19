@@ -91,7 +91,7 @@ export class XStorageController {
     return safe_path;
   }
 
-  @Post('/title/:titleId/clips')
+  @Post('/clips/title/:titleId/:xuid/:leaderboardId')
   @ApiParam({
     name: 'xuid',
     example: '0009000000000000',
@@ -100,15 +100,20 @@ export class XStorageController {
     name: 'titleId',
     example: '41560817',
   })
+  @ApiParam({
+    name: 'leaderboardId',
+    example: '100',
+  })
   async XStorageBuildServerPathClip(
     @Param('xuid') xuid: string,
     @Param('titleId') titleId: string,
+    @Param('leaderboardId') leaderboardId: string,
   ): Promise<number> {
     if (this.envs.xstorage == 'false') {
       throw new ForbiddenException('XStorage support is disabled on backend!');
     }
 
-    const location = `/user/${xuid}/title/${titleId}/clips`;
+    const location = `/clips/title/${titleId}/${xuid}/${leaderboardId}`;
     const absolute_path = this.SanitizePath(location);
 
     const result: BuildServerPathState = await this.commandBus.execute(
@@ -130,22 +135,27 @@ export class XStorageController {
     return result;
   }
 
-  @Post('/title/:titleId/clips/:file')
-  @ApiParam({
-    name: 'xuid',
-    example: '0009000000000000',
-  })
+  @Post('/clips/title/:titleId/:xuid/:leaderboardId/:file')
   @ApiParam({
     name: 'titleId',
     example: '41560817',
   })
   @ApiParam({
+    name: 'xuid',
+    example: '0009000000000000',
+  })
+  @ApiParam({
+    name: 'leaderboardId',
+    example: '100',
+  })
+  @ApiParam({
     name: 'file',
-    example: 'mpdata',
+    example: 'Game_Clip',
   })
   async XStorageUploadClip(
     @Param('xuid') xuid: string,
     @Param('titleId') titleId: string,
+    @Param('leaderboardId') leaderboardId: string,
     @Param('file') file: string,
     @Req() req: RawBodyRequest<Request>,
   ): Promise<number> {
@@ -153,7 +163,7 @@ export class XStorageController {
       throw new ForbiddenException('XStorage support is disabled on backend!');
     }
 
-    const location = `/user/${xuid}/title/${titleId}/clips/${file}`;
+    const location = `/clips/title/${titleId}/${xuid}/${leaderboardId}/${file}`;
     const absolute_path = this.SanitizePath(location);
 
     const result: UploadState = await this.commandBus.execute(
@@ -185,26 +195,31 @@ export class XStorageController {
     return result;
   }
 
-  @Get('/title/:titleId/clips/:file')
-  @ApiParam({
-    name: 'xuid',
-    example: '0009000000000000',
-  })
+  @Get('/clips/title/:titleId/:xuid/:leaderboardId/:file')
   @ApiParam({
     name: 'titleId',
     example: '41560817',
   })
   @ApiParam({
+    name: 'xuid',
+    example: '0009000000000000',
+  })
+  @ApiParam({
+    name: 'leaderboardId',
+    example: '100',
+  })
+  @ApiParam({
     name: 'file',
-    example: 'mpdata',
+    example: 'Game_Clip',
   })
   async XStorageDownloadClip(
     @Param('xuid') xuid: string,
     @Param('titleId') titleId: string,
+    @Param('leaderboardId') leaderboardId: string,
     @Param('file') file: string,
     @Res() res: Response,
   ) {
-    const location = `/user/${xuid}/title/${titleId}/clips/${file}`;
+    const location = `/clips/title/${titleId}/${xuid}/${leaderboardId}/${file}`;
     const absolute_path = this.SanitizePath(location);
 
     const downloaded: boolean = await this.commandBus.execute(
@@ -222,30 +237,33 @@ export class XStorageController {
     }
   }
 
-  @Delete('/title/:titleId/clips/:file')
-  @ApiParam({
-    name: 'xuid',
-    example: '0009000000000000',
-  })
+  @Delete('/clips/title/:titleId/:xuid/:leaderboardId/:file')
   @ApiParam({
     name: 'titleId',
     example: '41560817',
   })
   @ApiParam({
+    name: 'xuid',
+    example: '0009000000000000',
+  })
+  @ApiParam({
+    name: 'leaderboardId',
+    example: '100',
+  })
+  @ApiParam({
     name: 'file',
-    example: 'mpdata',
+    example: 'Game_Clip',
   })
   async XStorageDeleteClip(
     @Param('xuid') xuid: string,
     @Param('titleId') titleId: string,
+    @Param('leaderboardId') leaderboardId: string,
     @Param('file') file: string,
   ) {
     throw new ForbiddenException('Deleting clip content is not allowed!');
 
-    const absolute_path = join(
-      this.xstorage_root,
-      `/user/${xuid}/title/${titleId}/clips/${file}`,
-    );
+    const location = `/clips/title/${titleId}/${xuid}/${leaderboardId}/${file}`;
+    const absolute_path = this.SanitizePath(location);
 
     await this.commandBus.execute(new XStorageDeleteCommand(absolute_path));
   }
