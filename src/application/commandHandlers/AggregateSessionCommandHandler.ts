@@ -167,8 +167,15 @@ export class AggregateSessionCommandHandler
         const images: any =
           xml_document['a:feed']['a:entry']['images']['image'];
 
-        const image = images.find((img: any) => img.size == 14);
-        const tileUrl: string = image.fileUrl;
+        const image = images.find((img: any) => img?.size == 14);
+        let tileUrl: string;
+
+        // If size property doesn't exist use first tile
+        if (image) {
+          tileUrl = image.fileUrl;
+        } else {
+          tileUrl = images[0].fileUrl;
+        }
 
         if (tileUrl) {
           icon_base64 = await this.downloadImageAsBase64(tileUrl);
@@ -179,7 +186,7 @@ export class AggregateSessionCommandHandler
           }
         }
       } catch {
-        /* empty */
+        this.logger.error('Failed get tile.');
       }
     }
 
