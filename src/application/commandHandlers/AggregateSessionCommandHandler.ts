@@ -129,8 +129,12 @@ export class AggregateSessionCommandHandler
 
     try {
       title = xml_document['a:feed']['a:entry']['a:title'];
+
+      if (!title) {
+        title = xml_document['a:feed']['a:entry']['fullTitle'];
+      }
     } catch {
-      /* empty */
+      this.logger.error(`Failed to get title name!`);
     }
 
     return title;
@@ -147,7 +151,7 @@ export class AggregateSessionCommandHandler
       const image = images.find((img: any) => img.size == 14);
       title_url = image.fileUrl;
     } catch {
-      /* empty */
+      this.logger.error(`Failed to get tile URL!`);
     }
 
     return title_url;
@@ -173,7 +177,7 @@ export class AggregateSessionCommandHandler
         // If size property doesn't exist use first tile
         if (image) {
           tileUrl = image.fileUrl;
-        } else {
+        } else if (images.length > 0) {
           tileUrl = images[0].fileUrl;
         }
 
