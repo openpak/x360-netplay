@@ -237,8 +237,10 @@ export class AggregateSessionCommandHandler
         const HostGamerName = HostGamerNameProperty.getUTF16();
 
         // Check for empty HostGamerName incase of base64 corruption
-        if (HostGamerName) {
+        if (HostGamerName && XStringVerify.Verify(HostGamerName)) {
           return HostGamerName;
+        } else {
+          return 'Player 1';
         }
       }
     }
