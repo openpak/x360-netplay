@@ -11,19 +11,14 @@ export class ProcessClientAddressCommandHandler
     logger.setContext(ProcessClientAddressCommand.name);
   }
 
+  // eslint-disable-next-line @typescript-eslint/require-await
   async execute(command: ProcessClientAddressCommand) {
-    let ipv4 = command.ip;
-
     // Must trim ::ffff: from private IPs because session hostAddress is not in IPv6 format.
-    ipv4 = ipaddr.process(ipv4).toString();
+    const IP = ipaddr.process(command.ip);
+    const IP_address = IP.toString();
 
-    // Use Dynamic Import of ESM
-    await import('private-ip').then((is_ip_private) => {
-      this.logger.debug(
-        `${is_ip_private.default(ipv4) ? 'Private' : 'Public'} IPv4: ${ipv4}`,
-      );
-    });
+    this.logger.debug(`Client IP Range: ${IP.range()}`);
 
-    return ipv4;
+    return IP_address;
   }
 }
