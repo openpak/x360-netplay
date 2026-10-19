@@ -1,19 +1,16 @@
-# OpenPak integration
+# OpenPak status: excluded from integration
 
-OpenPak fork of [Xenia Web Services](https://github.com/AdrianCassar/Xenia-WebServices),
-under its existing MIT license. OpenPak changes use `main`.
+This is an evaluation fork of
+[Xenia Web Services](https://github.com/AdrianCassar/Xenia-WebServices), under
+its existing MIT license. It is not an active OpenPak service.
 
-This is an emulator-oriented REST API. It is not the native Xbox Live protocol
-and does not replace OpenPak's x360-kdc, x360-gateway or other native services.
+OpenPak requires one native Xbox 360 backend shared by physical consoles and
+Wharf. Xenia Web Services uses an emulator-specific REST API and is therefore
+excluded from the implementation plan. Do not build, deploy or add an adapter
+to it as part of the Xbox 360 work.
 
-Initial integration work:
-
-- Inventory session, player, storage and leaderboard endpoints used by Wharf.
-- Map authenticated OpenPak users to the same stable XUIDs as native Live.
-- Review which session functions can share state with native services, and
-  explicitly document remaining emulator-only behavior.
-- Run isolated tests before enabling routes in production.
-
-The fork is for evaluation. It has not been built, deployed or proven to
-interoperate with real Xbox 360 consoles. Upstream title archives and game
-assets are separate inputs; do not automatically import them into releases.
+The fork remains as evaluation history. The production path is OpenPak's
+native x360 services. Wharf must emulate the console's XAM/XNet behavior and
+speak the same native service protocols, identities and session contracts as
+physical Xbox 360 hardware. Compatibility work belongs in Wharf or the shared
+native services, without a separate emulator-only protocol.
