@@ -32,7 +32,7 @@ npm install && npm run build && npm start   # frontend: http://127.0.0.1:36000/
 
 - [Protocol](docs/protocol.md)
 - [Deploy](docs/deploy.md)
-- [Notes](docs/notes.md)
+- [Provenance](docs/provenance.md)
 - [Upstream README](docs/upstream.md)
 
 ## Licence
