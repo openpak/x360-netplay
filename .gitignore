@@ -44,3 +44,5 @@ lerna-debug.log*
 
 # Compiled frontend (src/frontend)
 /src/public/js
+next-session.md
+NEXT-SESSION.md

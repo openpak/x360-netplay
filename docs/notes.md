@@ -1,6 +1,6 @@
 # Notes: x360-netplay
 
-## Status (from OPENPAK.md)
+## Policy (from OPENPAK.md)
 
 This is an evaluation fork of
 [Xenia Web Services](https://github.com/AdrianCassar/Xenia-WebServices), under
